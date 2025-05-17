@@ -1,0 +1,39 @@
+#docker network create app_network
+version: "3.8"
+
+services:
+  api:
+    image: evoapicloud/evo-ai:homolog
+    ports:
+      - "8000:8000"
+    networks:
+      - app_network
+    environment:
+      POSTGRES_CONNECTION_STRING: postgresql://postgres:minha_senha@postgres:5432/evo_ai
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      #REDIS_PASSWORD: ${REDIS_PASSWORD:-""}
+      REDIS_SSL: "false"
+      REDIS_KEY_PREFIX: "a2a:"
+      REDIS_TTL: 3600
+      JWT_SECRET_KEY: kJj6EuRK7ntQ5NXqVHfsgH22vYi4Gxac
+      #SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      #EMAIL_FROM: ${EMAIL_FROM}
+      APP_URL: 192.168.1.74:8000
+      LOG_LEVEL: INFO
+      DEBUG: false
+      
+      # Seeder settings
+      ADMIN_EMAIL: andersonlemes50@gmail.com
+      ADMIN_INITIAL_PASSWORD: admin123
+      ORGANIZATION_NAME: Evo AI
+      ORGANIZATION_URL: http://192.168.1.74:8000
+      
+      
+    volumes:
+      - ./logs:/app/logs
+      - ./static:/app/static
+
+networks:
+  app_network:
+    external: true      
